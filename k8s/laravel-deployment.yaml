@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel
+  labels:
+    app: laravel
+    tier: fullstack
+spec:
+  selector:
+    matchLabels:
+      app: laravel
+      tier: fullstack
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: laravel
+        tier: fullstack
+    spec:
+      containers:
+      - image: jesusgr4/images-repository:laravel-app
+        name: laravel
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: laravel-secret
+              key: db_password
+        - name: ENCRYPTED_KEY
+          valueFrom:
+            secretKeyRef:
+              name: laravel-secret
+              key: encrypted_key
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mysqlcm
+              key: db_host
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: laravelcm
+              key: environment
+        - name: DEBUG_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: laravelcm
+              key: debug_mode
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mysqlcm
+              key: port
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysqlcm
+              key: database
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mysqlcm
+              key: username
+        ports:
+        - containerPort: 9000
+          name: laravel
+      - image: jesusgr4/images-repository:nginx-server
+        name: server
+        env:
+        - name: LARAVEL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: laravelcm
+              key: laravel_host
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: prod.conf
+
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: configfiles

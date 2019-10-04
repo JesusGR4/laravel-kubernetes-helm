@@ -22,24 +22,22 @@ services:
       driver: "json-file"
     volumes:
       - ./nginx/laravel-application:/var/www/laravel-application
-      - vendor:$ENV_VENDOR
     links:
       - db
 
   nginx:
-    image: jesusgr4/images-repository:nginx
+    image: jesusgr4/images-repository:nginx-server
     build:
       context: ./nginx/
       dockerfile: Dockerfile
+      args:
+        - VENDOR_DIR=$ENV_VENDOR
+    environment:
+      - LARAVEL_HOST=$LARAVEL_HOST
     container_name: server
     restart: unless-stopped
     volumes:
       - ./nginx/laravel-application:/var/www/laravel-application
-      - type: volume
-        source: vendor
-        target: $ENV_VENDOR
-        volume:
-          nocopy: true
     depends_on:
       - laravel
     ports:
@@ -59,7 +57,3 @@ services:
       MYSQL_ROOT_PASSWORD: $DB_PASSWORD
       MYSQL_USER: $DB_USERNAME
       MYSQL_PASSWORD: $DB_PASSWORD
-
-volumes:
-  vendor:
-    

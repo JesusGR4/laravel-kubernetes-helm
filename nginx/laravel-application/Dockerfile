@@ -30,8 +30,8 @@ RUN mkdir -p ${VENDOR_DIR} && apt-get update && apt-get install -y \
 COPY . /var/www/laravel-application
 COPY --from=composer ${VENDOR_DIR} ${VENDOR_DIR}
 RUN cd /var/www/laravel-application && composer dump-autoload
-RUN chown -R www-data:www-data /var/www/
-USER www-data
+RUN chmod -R 777 /var/www/laravel-application/bootstrap/cache && chmod -R 777 /var/www/laravel-application/storage
+
 EXPOSE 9000
 CMD ["php-fpm"]
 
