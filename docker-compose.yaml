@@ -3,7 +3,7 @@ services:
   laravel:
     image: jesusgr4/images-repository:laravel-app
     build:
-      context: ./laravel-application/
+      context: ./nginx/laravel-application/
       dockerfile: Dockerfile
       args:
         - VENDOR_DIR=$ENV_VENDOR
@@ -21,7 +21,7 @@ services:
     logging:
       driver: "json-file"
     volumes:
-      - static_files:/var/www/laravel-application
+      - ./nginx/laravel-application:/var/www/laravel-application
       - vendor:$ENV_VENDOR
     links:
       - db
@@ -34,11 +34,7 @@ services:
     container_name: server
     restart: unless-stopped
     volumes:
-      - type: volume
-        source: static_files
-        target: /var/www/laravel-application
-        volume:
-          nocopy: true
+      - ./nginx/laravel-application:/var/www/laravel-application
       - type: volume
         source: vendor
         target: $ENV_VENDOR
@@ -66,5 +62,4 @@ services:
 
 volumes:
   vendor:
-  static_files:
     
