@@ -21,6 +21,13 @@ spec:
       containers:
       - image: jesusgr4/laravel-repository:laravel-keepcoding
         name: laravel
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 300m
+          limits:
+            memory: 512Mi
+            cpu: 400m
         env:
         - name: DB_PASSWORD
           valueFrom:
@@ -65,19 +72,28 @@ spec:
         ports:
         - containerPort: 9000
           name: laravel
+
       - image: jesusgr4/laravel-repository:nginx-keepcoding
         name: server
-        env:
-        - name: LARAVEL_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: laravelcm
-              key: laravel_host
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 200m
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d/default.conf
           subPath: prod.conf
-
       volumes:
         - name: nginx-config
           configMap:

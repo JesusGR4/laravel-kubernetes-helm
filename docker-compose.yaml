@@ -32,8 +32,6 @@ services:
       dockerfile: Dockerfile
       args:
         - VENDOR_DIR=$ENV_VENDOR
-    environment:
-      - LARAVEL_HOST=$LARAVEL_HOST
     container_name: server
     restart: unless-stopped
     volumes:
