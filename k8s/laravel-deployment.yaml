@@ -19,7 +19,7 @@ spec:
         tier: fullstack
     spec:
       containers:
-      - image: jesusgr4/laravel-repository:laravel-keepcoding
+      - image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.0
         name: laravel
         resources:
           requests:
@@ -73,7 +73,7 @@ spec:
         - containerPort: 9000
           name: laravel
 
-      - image: jesusgr4/laravel-repository:nginx-keepcoding
+      - image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.0
         name: server
         resources:
           requests:

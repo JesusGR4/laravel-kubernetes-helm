@@ -14,3 +14,4 @@ ENV VENDOR_DIR $VENDOR_DIR
 COPY ./environment-config/nginx/conf.d/app.conf /etc/nginx/conf.d/default.conf
 COPY ./laravel-application/ /var/www/html
 COPY --from=composer ${VENDOR_DIR} ${VENDOR_DIR}
+
