@@ -1,8 +1,8 @@
 FROM composer:1.9.0 as composer
 ARG VENDOR_DIR
 ENV VENDOR_DIR $VENDOR_DIR
-RUN mkdir -p /var/www/laravel-application && mkdir -p ${VENDOR_DIR}
-WORKDIR /var/www/laravel-application
+RUN mkdir -p /var/www/html && mkdir -p ${VENDOR_DIR}
+WORKDIR /var/www/html
 COPY . ./
 RUN yes | composer install
 VOLUME $VENDOR_DIR
@@ -27,10 +27,9 @@ RUN mkdir -p ${VENDOR_DIR} && apt-get update && apt-get install -y \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 
-COPY . /var/www/laravel-application
+COPY . /var/www/html
 COPY --from=composer ${VENDOR_DIR} ${VENDOR_DIR}
-RUN cd /var/www/laravel-application && composer dump-autoload
-RUN chmod -R 777 /var/www/laravel-application/bootstrap/cache && chmod -R 777 /var/www/laravel-application/storage
+RUN cd /var/www/html && composer dump-autoload && chown -R www-data:www-data /var/www/html
 
 EXPOSE 9000
 CMD ["php-fpm"]

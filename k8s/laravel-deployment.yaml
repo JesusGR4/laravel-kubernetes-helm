@@ -19,7 +19,7 @@ spec:
         tier: fullstack
     spec:
       containers:
-      - image: jesusgr4/images-repository:laravel-app
+      - image: jesusgr4/laravel-repository:laravel-keepcoding
         name: laravel
         env:
         - name: DB_PASSWORD
@@ -65,7 +65,7 @@ spec:
         ports:
         - containerPort: 9000
           name: laravel
-      - image: jesusgr4/images-repository:nginx-server
+      - image: jesusgr4/laravel-repository:nginx-keepcoding
         name: server
         env:
         - name: LARAVEL_HOST

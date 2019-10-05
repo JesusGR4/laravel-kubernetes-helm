@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   laravel:
-    image: jesusgr4/images-repository:laravel-app
+    image: jesusgr4/laravel-repository:laravel-keepcoding
     build:
       context: ./nginx/laravel-application/
       dockerfile: Dockerfile
@@ -21,12 +21,12 @@ services:
     logging:
       driver: "json-file"
     volumes:
-      - ./nginx/laravel-application:/var/www/laravel-application
+      - ./nginx/laravel-application:/var/www/html
     links:
       - db
 
   nginx:
-    image: jesusgr4/images-repository:nginx-server
+    image: jesusgr4/laravel-repository:nginx-keepcoding
     build:
       context: ./nginx/
       dockerfile: Dockerfile
@@ -37,7 +37,7 @@ services:
     container_name: server
     restart: unless-stopped
     volumes:
-      - ./nginx/laravel-application:/var/www/laravel-application
+      - ./nginx/laravel-application:/var/www/html
     depends_on:
       - laravel
     ports:
