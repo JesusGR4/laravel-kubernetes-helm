@@ -46,3 +46,7 @@ FOR GKE
 
 If you use this in a new cluster, you will have to change the IP in ingress-nginx.yaml and change it for the External Ip which appears in the following sentence:
 ```k -n ingress-nginx get svc```
+
+## NOTE
+
+If you get CrashLoopBackOff when you get pods info, just wait, Pods are creating and thereis a healthcheck :)

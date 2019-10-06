@@ -19,7 +19,7 @@ spec:
         tier: fullstack
     spec:
       containers:
-      - image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.3
+      - image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.6
         name: laravel
         command: ["/bin/bash"]
         args: ["-c", "php /var/www/html/artisan migrate && php-fpm"]
@@ -75,7 +75,7 @@ spec:
         - containerPort: 9000
           name: laravel
 
-      - image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.3
+      - image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.6
         name: server
         resources:
           requests:

@@ -19,6 +19,7 @@ RUN mkdir -p ${VENDOR_DIR} && apt-get update && apt-get install -y \
     libfreetype6-dev \
     locales \
     zip \
+    telnet \
     jpegoptim optipng pngquant gifsicle \
     vim \
     unzip \
@@ -31,8 +32,4 @@ COPY . /var/www/html
 COPY --from=composer ${VENDOR_DIR} ${VENDOR_DIR}
 WORKDIR /var/www/html
 RUN composer dump-autoload && chown -R www-data:www-data /var/www/html
-
 EXPOSE 9000
-
-
-

@@ -15,3 +15,5 @@ COPY ./environment-config/nginx/conf.d/app.conf /etc/nginx/conf.d/default.conf
 COPY ./laravel-application/ /var/www/html
 COPY --from=composer ${VENDOR_DIR} ${VENDOR_DIR}
 
+HEALTHCHECK --interval=5s --timeout=1s \
+     CMD ping localhost:8080 || exit 1
