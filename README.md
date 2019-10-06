@@ -5,9 +5,22 @@ This is a sample Laravel Project. We are using Laravel 6, PHP 7.2 and MySQL as D
 ## Functionality 
 
 In local, you can register using localhost:$PORT. $PORT is specified in root project .env.
-If you want to change environment variables, you have to change .env file in root project.
+If you want to test Laravel DB, just do a POST call to the following 
+
+```localhost:$PORT/api/createUser``` 
+
+and you have to pass as params the following fields: name, email and password.
+
+![alt text](images/postMethod.png "Post method")
+
+If you want to check it works, just list using a GET call to:
+
+![alt text](images/getMethod.png "Post method")
+
+```localhost:$PORT/api/list```
 
 
+Note: Use Sofware like Postman in order to check it out
 #How to deploy in local
 
 Just go to root project and execute
