@@ -1,7 +1,8 @@
 version: '3.7'
 services:
   laravel:
-    image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.1
+    image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.2
+    command: bash -c "php /var/www/html/artisan migrate && php-fpm"
     build:
       context: ./nginx/laravel-application/
       dockerfile: Dockerfile
@@ -24,7 +25,7 @@ services:
       - db
 
   nginx:
-    image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.1
+    image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.2
     build:
       context: ./nginx/
       dockerfile: Dockerfile

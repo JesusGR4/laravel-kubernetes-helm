@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
+
+Route::post('createUser', 'Auth\RegisterController@create')->name('createUser');
+Route::get('list', 'Auth\RegisterController@list')->name('list');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
