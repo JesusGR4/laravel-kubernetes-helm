@@ -21,13 +21,13 @@ If you want to check it works, just list using a GET call to:
 
 
 Note: Use Sofware like Postman in order to check it out
-#How to deploy in local
+## How to deploy in local
 
 Just go to root project and execute
 
 `docker-compose up --build -d`
 
-#How to deploy in Kubernetes
+## How to deploy in Kubernetes
 First, create a namespace and change the context.
 Then, you will have to create a secret, in order to satisfy our k8s project, execute similar command:
 `kubectl create secret generic laravel-secret --from-literal=db_password=root --from-literal=encrypted_key='base64:+5EKn7wOp0Bg4ALke82sUSzoQxM+QpNKkuxaGE4w4DI=' --dry-run -o yaml > secret.yaml`
