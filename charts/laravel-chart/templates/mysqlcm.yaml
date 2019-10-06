@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  database: {{ template "laravel.name" . }}
+  db_host: {{ template "laravel.name" . }}-{{ template "mysql.name" . }}
+  port: "3306"
+  username: root
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: {{ template "mysql.name" . }}cm

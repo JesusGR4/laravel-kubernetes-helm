@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  debug_mode: "false"
+  environment: production
+  vendor_dir: /var/vendor
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: {{ template "laravel.name" . }}cm

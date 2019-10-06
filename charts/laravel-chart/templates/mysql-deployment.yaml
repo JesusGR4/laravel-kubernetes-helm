@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "laravel.name" . }}-{{ template "mysql.name" . }}
+  labels:
+    app: {{ template "laravel.name" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "laravel.name" . }}
+      tier: {{ template "mysql.name" . }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "laravel.name" . }}
+        tier: {{ template "mysql.name" . }}
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: {{ template "mysql.name" . }}
+        resources:
+          requests:
+            memory: {{ template "mysql.resources.requests.memory" . }}
+            cpu: {{ template "mysql.resources.requests.cpu" . }}
+          limits:
+            memory: {{ template "mysql.resources.limits.memory" . }}
+            cpu: {{ template "mysql.resources.limits.cpu" . }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "laravel.name" . }}-secret
+              key: db_password
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "laravel.name" . }}-secret
+              key: db_password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: username
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: database
+        ports:
+        - containerPort: 3306
+          name: {{ template "mysql.name" . }}
+        volumeMounts:
+        - name: {{ template "mysql.name" . }}-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: {{ template "mysql.name" . }}-persistent-storage
+        persistentVolumeClaim:
+          claimName: {{ template "mysql.name" . }}-pv-claim

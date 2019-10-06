@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "laravel.name" . }}
+  labels:
+    app: {{ template "laravel.name" . }}
+    tier: {{ template "laravel.tier" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "laravel.name" . }}
+      tier: {{ template "laravel.tier" . }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "laravel.name" . }}
+        tier: {{ template "laravel.tier" . }}
+    spec:
+      containers:
+      - image: jesusgr4/laravel-repository:laravel-keepcoding-v1.0.3
+        name: {{ template "laravel.name" . }}
+        command: ["/bin/bash"]
+        args: ["-c", "php /var/www/html/artisan migrate && php-fpm"]
+        resources:
+          requests:
+            memory: {{ template "laravel.resources.requests.memory" . }}
+            cpu: {{ template "laravel.resources.requests.cpu" . }}
+          limits:
+            memory: {{ template "laravel.resources.limits.memory" . }}
+            cpu: {{ template "laravel.resources.limits.cpu" . }}
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "laravel.name" . }}-secret
+              key: db_password
+
+        - name: ENCRYPTED_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "laravel.name" . }}-secret
+              key: encrypted_key
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: db_host
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "laravel.name" . }}cm
+              key: environment
+        - name: DEBUG_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "laravel.name" . }}cm
+              key: debug_mode
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: port
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: database
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "mysql.name" . }}cm
+              key: username
+        ports:
+        - containerPort: 9000
+          name: {{ template "laravel.name" . }}
+
+      - image: jesusgr4/laravel-repository:nginx-keepcoding-v1.0.3
+        name: server
+        resources:
+          requests:
+            memory: {{ template "nginx.resources.requests.memory" . }}
+            cpu: {{ template "nginx.resources.requests.cpu" . }}
+          limits:
+            memory: {{ template "nginx.resources.limits.memory" . }}
+            cpu: {{ template "nginx.resources.limits.cpu" . }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        volumeMounts:
+        - name: {{ template "nginx.name" . }}-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: prod.conf
+      volumes:
+        - name: {{ template "nginx.name" . }}-config
+          configMap:
+            name: configfiles

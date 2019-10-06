@@ -1,0 +1,14 @@
+ apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: {{ template "laravel.name" . }}
+spec:
+  rules:
+  - host: jesus-practice.34.77.127.249.nip.io
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "laravel.name" . }}-svc
+          servicePort: 80

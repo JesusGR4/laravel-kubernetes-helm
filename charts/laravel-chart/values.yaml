@@ -1,0 +1,31 @@
+laravel:
+  name: laravel
+  tier: fullstack
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 300m
+    limits:
+      memory: 512Mi
+      cpu: 400m
+
+mysql:
+  name: mysql
+  user: root
+  database: laravel
+  resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 300m
+nginx:
+  name: nginx
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 200m
